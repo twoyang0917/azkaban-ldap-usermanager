@@ -149,7 +149,7 @@ public class LdapUserManager implements UserManager {
         if (ldapEmbeddedGroups) {
             Attribute groups = user.get("memberof");
             for (String expectedGroupName : expectedGroups) {
-                String expectedGroup = "CN=" + expectedGroupName + "," + ldapGroupSearchBase;
+                String expectedGroup = "cn=" + expectedGroupName + "," + ldapGroupSearchBase;
                 final boolean isMember = attributeContainsNormalized(expectedGroup, groups);
                 logger.info("For group '" + expectedGroupName + "' " +
                         "searched for '" + expectedGroup + "' " +
@@ -174,7 +174,7 @@ public class LdapUserManager implements UserManager {
 
             String username = usernameValue.getString();
             for (String expectedGroupName : expectedGroups) {
-                String expectedGroup = "CN=" + expectedGroupName + "," + ldapGroupSearchBase;
+                String expectedGroup = "cn=" + expectedGroupName + "," + ldapGroupSearchBase;
                 logger.info("For group '" + expectedGroupName + "' " +
                         "looking up '" + expectedGroup + "'...");
                 Entry result = connection.lookup(expectedGroup);
@@ -185,7 +185,7 @@ public class LdapUserManager implements UserManager {
                 }
 
                 Attribute objectClasses = result.get("objectClass");
-                if(objectClasses != null && objectClasses.contains("groupOfNames")) {
+                if(objectClasses != null && objectClasses.contains("groupofnames")) {
                     Attribute members = result.get("member");
 
                     if (members == null) {
@@ -193,7 +193,7 @@ public class LdapUserManager implements UserManager {
                         return false;
                     }
 
-                    String userDn = "cn=" + username + "," + ldapUserBase;
+                    String userDn = "uid=" + username + "," + ldapUserBase;
                     boolean isMember = members.contains(userDn);
                     logger.info("Searched for userDn '" + userDn + "' " +
                             "within group members of group '" + expectedGroupName + "'. " +
